@@ -3,205 +3,229 @@
  * Initialise et orchestre tous les agents via le middleware MCP
  */
 
-import 'dotenv/config';
+import express from 'express';
+import dotenv from 'dotenv';
 import path from 'path';
 import { fileURLToPath } from 'url';
 import fs from 'fs';
 import logger from './utils/logger.js';
 import mcpMiddleware from './middleware/mcp-middleware.js';
 import ContentAnalysisAgent from './agents/content-analysis-agent.js';
+import TwitterAgent from './agents/twitter-agent.js';
 // Importer les autres agents à mesure qu'ils sont implémentés
 
-// Obtenir le répertoire actuel en utilisant ESM
+// Charger les variables d'environnement
+dotenv.config();
+
+// Configuration de l'application
+const app = express();
+const PORT = process.env.PORT || 3000;
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-// Créer le répertoire de logs s'il n'existe pas
-const logsDir = path.join(__dirname, '..', 'logs');
-if (!fs.existsSync(logsDir)) {
-  fs.mkdirSync(logsDir, { recursive: true });
-}
+// Middleware pour les logs
+app.use((req, res, next) => {
+  logger.info(`${req.method} ${req.url}`);
+  next();
+});
 
-/**
- * Classe principale de l'application
- */
-class SocialMcpAgentApp {
-  constructor() {
-    this.agents = new Map();
-    this.logger = logger.createSubLogger('App');
-    this.initialized = false;
-    this.started = false;
-  }
+// Middleware pour parser le JSON
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 
-  /**
-   * Initialise l'application et ses composants
-   */
-  async initialize() {
-    if (this.initialized) {
-      this.logger.warn('L\'application est déjà initialisée');
-      return;
-    }
+// Servir les fichiers statiques
+app.use(express.static(path.join(__dirname, '../public')));
 
-    this.logger.info('Initialisation de l\'application Social MCP Agent');
+// Initialisation des agents
+const agents = {
+  contentAnalysis: new ContentAnalysisAgent(),
+  twitter: new TwitterAgent({
+    apiKey: process.env.TWITTER_API_KEY,
+    apiSecretKey: process.env.TWITTER_API_SECRET_KEY,
+    accessToken: process.env.TWITTER_ACCESS_TOKEN,
+    accessTokenSecret: process.env.TWITTER_ACCESS_TOKEN_SECRET
+  })
+};
 
-    // Initialiser le middleware MCP
-    await mcpMiddleware.initialize();
+// Stockage des états des agents
+let agentStatus = {
+  contentAnalysis: false,
+  twitter: false
+};
 
-    // Créer et initialiser les agents
-    await this.initializeAgents();
-
-    this.initialized = true;
-    this.logger.info('Application initialisée avec succès');
-  }
-
-  /**
-   * Initialise tous les agents
-   */
-  async initializeAgents() {
-    this.logger.info('Initialisation des agents');
-
-    // Créer et initialiser l'agent d'analyse de contenu
-    const contentAnalysisAgent = new ContentAnalysisAgent();
-    await contentAnalysisAgent.initialize();
-    this.agents.set(contentAnalysisAgent.id, contentAnalysisAgent);
-    mcpMiddleware.registerAgent(contentAnalysisAgent.id, contentAnalysisAgent);
-
-    // Ajouter l'initialisation des autres agents au fur et à mesure qu'ils sont implémentés
-    // Exemple :
-    // const trendsAgent = new TrendsAgent();
-    // await trendsAgent.initialize();
-    // this.agents.set(trendsAgent.id, trendsAgent);
-    // mcpMiddleware.registerAgent(trendsAgent.id, trendsAgent);
-
-    this.logger.info(`${this.agents.size} agent(s) initialisé(s)`);
-  }
-
-  /**
-   * Démarre l'application et ses composants
-   */
-  async start() {
-    if (!this.initialized) {
-      await this.initialize();
-    }
-
-    if (this.started) {
-      this.logger.warn('L\'application est déjà démarrée');
-      return;
-    }
-
-    this.logger.info('Démarrage de l\'application Social MCP Agent');
-
-    // Démarrer tous les agents
-    for (const [id, agent] of this.agents.entries()) {
-      this.logger.info(`Démarrage de l'agent '${id}'`);
+// Démarrer les agents
+async function startAgent(name) {
+  if (agents[name]) {
+    try {
+      const agent = agents[name];
       await agent.start();
-    }
-
-    // Configuration de la gestion des événements d'application
-    this.setupEventHandlers();
-
-    this.started = true;
-    this.logger.info('Application démarrée avec succès');
-  }
-
-  /**
-   * Configure les gestionnaires d'événements inter-agents
-   */
-  setupEventHandlers() {
-    // Configuration des événements entre agents ici
-    // Par exemple, l'agent tendances pourrait écouter les analyses de l'agent de contenu
-
-    // Exemple pour l'agent d'analyse de contenu
-    const contentAnalysisAgent = this.agents.get('content-analysis');
-    if (contentAnalysisAgent) {
-      contentAnalysisAgent.on('analysis-completed', (data) => {
-        this.logger.debug(`Analyse complétée: ${data.type} (ID: ${data.taskId})`);
-        
-        // Notifier les autres agents qui pourraient être intéressés
-        this.notifyAgents('analysis-event', data, [contentAnalysisAgent.id]);
-      });
+      logger.info(`Agent ${name} démarré`);
+      agentStatus[name] = true;
+      return true;
+    } catch (error) {
+      logger.error(`Erreur lors du démarrage de l'agent ${name}: ${error.message}`);
+      return false;
     }
   }
-
-  /**
-   * Notifie tous les agents (sauf ceux exclus) d'un événement
-   * @param {string} eventType - Type d'événement
-   * @param {object} data - Données de l'événement
-   * @param {array} excludeAgentIds - IDs des agents à exclure de la notification
-   */
-  notifyAgents(eventType, data, excludeAgentIds = []) {
-    for (const [id, agent] of this.agents.entries()) {
-      if (!excludeAgentIds.includes(id) && agent.running) {
-        // Émettre l'événement pour chaque agent
-        agent.emit(eventType, data);
-        this.logger.debug(`Agent '${id}' notifié de l'événement '${eventType}'`);
-      }
-    }
-  }
-
-  /**
-   * Arrête l'application et ses composants
-   */
-  async stop() {
-    if (!this.started) {
-      this.logger.warn('L\'application n\'est pas démarrée');
-      return;
-    }
-
-    this.logger.info('Arrêt de l\'application Social MCP Agent');
-
-    // Arrêter tous les agents dans l'ordre inverse de démarrage
-    const agentIds = Array.from(this.agents.keys());
-    for (let i = agentIds.length - 1; i >= 0; i--) {
-      const id = agentIds[i];
-      const agent = this.agents.get(id);
-      
-      this.logger.info(`Arrêt de l'agent '${id}'`);
-      await agent.stop();
-    }
-
-    // Arrêter le middleware MCP
-    await mcpMiddleware.shutdown();
-
-    this.started = false;
-    this.logger.info('Application arrêtée avec succès');
-  }
+  return false;
 }
 
-// Création de l'instance de l'application
-const app = new SocialMcpAgentApp();
+// Arrêter les agents
+async function stopAgent(name) {
+  if (agents[name]) {
+    try {
+      const agent = agents[name];
+      await agent.stop();
+      logger.info(`Agent ${name} arrêté`);
+      agentStatus[name] = false;
+      return true;
+    } catch (error) {
+      logger.error(`Erreur lors de l'arrêt de l'agent ${name}: ${error.message}`);
+      return false;
+    }
+  }
+  return false;
+}
 
-// Gestion des signaux pour un arrêt propre
-process.on('SIGINT', async () => {
-  logger.info('Signal SIGINT reçu, arrêt de l\'application...');
-  await app.stop();
-  process.exit(0);
+// Intégration du middleware MCP
+// app.use('/mcp', mcpMiddleware(agents));
+
+// Routes pour les API
+
+// Statut des agents
+app.get('/api/agents/status', (req, res) => {
+  res.json(agentStatus);
 });
 
-process.on('SIGTERM', async () => {
-  logger.info('Signal SIGTERM reçu, arrêt de l\'application...');
-  await app.stop();
-  process.exit(0);
+// Gestion des agents (démarrage/arrêt)
+app.post('/api/agents/:agent/:action', async (req, res) => {
+  const { agent, action } = req.params;
+  
+  if (!['twitter', 'contentAnalysis'].includes(agent)) {
+    return res.status(404).json({ error: `Agent ${agent} non trouvé` });
+  }
+  
+  if (!['start', 'stop'].includes(action)) {
+    return res.status(400).json({ error: `Action ${action} non valide` });
+  }
+  
+  try {
+    let success = false;
+    if (action === 'start') {
+      success = await startAgent(agent);
+    } else {
+      success = await stopAgent(agent);
+    }
+    
+    res.json({ success, status: agentStatus[agent] });
+  } catch (error) {
+    logger.error(`Erreur lors de l'action ${action} sur l'agent ${agent}: ${error.message}`);
+    res.status(500).json({ error: error.message });
+  }
 });
 
-// Gestion des erreurs non capturées
-process.on('uncaughtException', (error) => {
-  logger.error(`Erreur non capturée: ${error.message}`, { stack: error.stack });
-  // Arrêt d'urgence de l'application
-  app.stop().finally(() => process.exit(1));
+// Routes pour l'agent Twitter
+app.get('/api/twitter/search', async (req, res) => {
+  const { q, count = 10 } = req.query;
+  
+  if (!q) {
+    return res.status(400).json({ error: 'Un terme de recherche est requis' });
+  }
+  
+  try {
+    if (!agentStatus.twitter) {
+      return res.status(400).json({ error: 'L\'agent Twitter n\'est pas actif' });
+    }
+    
+    const result = await agents.twitter.searchTweets({ query: q, count: parseInt(count, 10) });
+    
+    if (!result.success) {
+      return res.status(500).json({ error: result.error });
+    }
+    
+    res.json(result.content);
+  } catch (error) {
+    logger.error(`Erreur lors de la recherche de tweets: ${error.message}`);
+    res.status(500).json({ error: error.message });
+  }
 });
 
-process.on('unhandledRejection', (reason, promise) => {
-  logger.error(`Rejet de promesse non géré: ${reason}`, { reason });
-  // Dans un environnement de production, on pourrait choisir de continuer
-  // mais en développement, mieux vaut arrêter pour corriger les problèmes
-  app.stop().finally(() => process.exit(1));
+app.get('/api/twitter/user/:username', async (req, res) => {
+  const { username } = req.params;
+  
+  try {
+    if (!agentStatus.twitter) {
+      return res.status(400).json({ error: 'L\'agent Twitter n\'est pas actif' });
+    }
+    
+    const result = await agents.twitter.getUserProfile({ username });
+    
+    if (!result.success) {
+      return res.status(500).json({ error: result.error });
+    }
+    
+    res.json(result.content);
+  } catch (error) {
+    logger.error(`Erreur lors de la récupération du profil utilisateur: ${error.message}`);
+    res.status(500).json({ error: error.message });
+  }
 });
 
-// Démarrer l'application directement
-app.start().catch(error => {
-  logger.error(`Erreur lors du démarrage de l'application: ${error.message}`, { stack: error.stack });
-  process.exit(1);
+app.get('/api/twitter/timeline/:username', async (req, res) => {
+  const { username } = req.params;
+  const { count = 10 } = req.query;
+  
+  try {
+    if (!agentStatus.twitter) {
+      return res.status(400).json({ error: 'L\'agent Twitter n\'est pas actif' });
+    }
+    
+    const result = await agents.twitter.getUserTimeline({ 
+      username, 
+      count: parseInt(count, 10) 
+    });
+    
+    if (!result.success) {
+      return res.status(500).json({ error: result.error });
+    }
+    
+    res.json(result.content);
+  } catch (error) {
+    logger.error(`Erreur lors de la récupération de la timeline: ${error.message}`);
+    res.status(500).json({ error: error.message });
+  }
+});
+
+// Routes pour l'agent d'analyse de contenu
+app.post('/api/content-analysis/analyze', async (req, res) => {
+  const { text, platform } = req.body;
+  
+  if (!text) {
+    return res.status(400).json({ error: 'Un texte est requis pour l\'analyse' });
+  }
+  
+  try {
+    if (!agentStatus.contentAnalysis) {
+      return res.status(400).json({ error: 'L\'agent d\'analyse de contenu n\'est pas actif' });
+    }
+    
+    const analysis = await agents.contentAnalysis.analyzeContent(text, platform);
+    res.json(analysis);
+  } catch (error) {
+    logger.error(`Erreur lors de l'analyse de contenu: ${error.message}`);
+    res.status(500).json({ error: error.message });
+  }
+});
+
+// Route par défaut pour servir l'application React
+app.get('*', (req, res) => {
+  res.sendFile(path.join(__dirname, '../public/index.html'));
+});
+
+// Démarrer le serveur
+app.listen(PORT, () => {
+  logger.info(`Serveur démarré sur le port ${PORT}`);
+  logger.info(`Accédez à l'application à l'adresse: http://localhost:${PORT}`);
 });
 
 export default app; 
