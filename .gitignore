@@ -1,0 +1,38 @@
+# Dépendances
+node_modules/
+npm-debug.log
+yarn-debug.log
+yarn-error.log
+
+# Logs
+logs/
+*.log
+
+# Fichiers d'environnement
+.env
+.env.local
+.env.development
+.env.test
+.env.production
+
+# Fichiers système
+.DS_Store
+Thumbs.db
+
+# Dossiers de build
+/dist
+/build
+
+# Fichiers temporaires
+*.tmp
+*.swp
+*.swo
+
+# Fichiers de couverture de code
+/coverage
+
+# Fichiers spécifiques à l'IDE
+.idea/
+.vscode/
+*.sublime-project
+*.sublime-workspace 
