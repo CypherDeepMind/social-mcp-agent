@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Social MCP Agent - Tableau de bord</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="/css/styles.css">
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <div class="container">
+            <a class="navbar-brand" href="/">
+                <i class="bi bi-braces"></i> Social MCP Agent
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav">
+                    <li class="nav-item">
+                        <a class="nav-link active" href="/">
+                            <i class="bi bi-speedometer2"></i> Tableau de bord
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#twitter-section">
+                            <i class="bi bi-twitter"></i> Twitter
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#analysis-section">
+                            <i class="bi bi-graph-up"></i> Analyse de contenu
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container my-4">
+        <h1 class="mb-4">Tableau de bord Social MCP Agent</h1>
+        
+        <div class="row">
+            <!-- Statut des agents -->
+            <div class="col-md-12 mb-4">
+                <div class="card">
+                    <div class="card-header">
+                        <h4>Statut des agents</h4>
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="card agent-card stopped" data-agent="twitter">
+                                    <div class="card-body">
+                                        <h5 class="card-title">
+                                            <span class="agent-status status-stopped"></span>
+                                            Agent Twitter
+                                        </h5>
+                                        <p class="card-text">
+                                            Statut: <span class="status-text">Arrêté</span>
+                                        </p>
+                                        <button class="btn btn-success toggle-agent" data-agent="twitter">Démarrer</button>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="card agent-card stopped" data-agent="contentAnalysis">
+                                    <div class="card-body">
+                                        <h5 class="card-title">
+                                            <span class="agent-status status-stopped"></span>
+                                            Agent d'analyse de contenu
+                                        </h5>
+                                        <p class="card-text">
+                                            Statut: <span class="status-text">Arrêté</span>
+                                        </p>
+                                        <button class="btn btn-success toggle-agent" data-agent="contentAnalysis">Démarrer</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Agent Twitter -->
+            <div class="col-md-12 mb-4" id="twitter-section">
+                <div class="card">
+                    <div class="card-header">
+                        <h4><i class="bi bi-twitter"></i> Agent Twitter</h4>
+                    </div>
+                    <div class="card-body">
+                        <form id="twitterSearchForm">
+                            <div class="row mb-3">
+                                <div class="col-md-8">
+                                    <input type="text" class="form-control" id="twitterQuery" 
+                                           placeholder="Rechercher des tweets (hashtag, mot-clé, utilisateur...)">
+                                </div>
+                                <div class="col-md-2">
+                                    <select class="form-select" id="tweetCount">
+                                        <option value="10">10 tweets</option>
+                                        <option value="25">25 tweets</option>
+                                        <option value="50">50 tweets</option>
+                                        <option value="100">100 tweets</option>
+                                    </select>
+                                </div>
+                                <div class="col-md-2">
+                                    <button type="submit" class="btn btn-primary w-100">
+                                        <i class="bi bi-search"></i> Rechercher
+                                    </button>
+                                </div>
+                            </div>
+                        </form>
+                        
+                        <div id="twitterResults">
+                            <div class="alert alert-info">
+                                <i class="bi bi-info-circle"></i> Utilisez le formulaire ci-dessus pour rechercher des tweets.
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Agent d'analyse de contenu -->
+            <div class="col-md-12 mb-4" id="analysis-section">
+                <div class="card">
+                    <div class="card-header">
+                        <h4><i class="bi bi-graph-up"></i> Agent d'analyse de contenu</h4>
+                    </div>
+                    <div class="card-body">
+                        <form id="contentAnalysisForm">
+                            <div class="mb-3">
+                                <textarea class="form-control" id="analysisText" rows="4" 
+                                          placeholder="Entrez le texte à analyser..."></textarea>
+                            </div>
+                            <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                                <button type="submit" class="btn btn-primary">
+                                    <i class="bi bi-lightning"></i> Analyser
+                                </button>
+                            </div>
+                        </form>
+                        
+                        <div id="analysisResults" class="mt-4">
+                            <div class="alert alert-info">
+                                <i class="bi bi-info-circle"></i> Entrez du texte ci-dessus pour obtenir une analyse.
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <footer class="bg-dark text-light py-4 mt-4">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-6">
+                    <h5>Social MCP Agent</h5>
+                    <p>Agent de Meta Context Protocol pour l'analyse de contenu des réseaux sociaux.</p>
+                </div>
+                <div class="col-md-6 text-md-end">
+                    <p>&copy; 2023 Social MCP Agent</p>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="/js/app.js"></script>
+</body>
+</html> 
