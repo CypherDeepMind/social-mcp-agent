@@ -1,0 +1,60 @@
+{"level":"info","message":"Démarrage du test de l'agent d'analyse de contenu","service":"Social MCP Agent","timestamp":"2025-03-16 07:28:35"}
+{"level":"info","message":"[Agent-content-analysis] Agent 'content-analysis' créé","service":"Social MCP Agent","timestamp":"2025-03-16 07:28:35"}
+{"level":"info","message":"[Agent-content-analysis] Agent d'analyse de contenu créé","service":"Social MCP Agent","timestamp":"2025-03-16 07:28:35"}
+{"level":"info","message":"[Agent-content-analysis] Initialisation de l'agent 'content-analysis'","service":"Social MCP Agent","timestamp":"2025-03-16 07:28:35"}
+{"level":"debug","message":"[Agent-content-analysis] Outil 'analyze_text' enregistré par l'agent 'content-analysis'","service":"Social MCP Agent","timestamp":"2025-03-16 07:28:35"}
+{"level":"debug","message":"[Agent-content-analysis] Outil 'analyze_image' enregistré par l'agent 'content-analysis'","service":"Social MCP Agent","timestamp":"2025-03-16 07:28:35"}
+{"level":"debug","message":"[Agent-content-analysis] Outil 'analyze_post' enregistré par l'agent 'content-analysis'","service":"Social MCP Agent","timestamp":"2025-03-16 07:28:35"}
+{"level":"debug","message":"[Agent-content-analysis] Ressource 'content_analysis_results' enregistrée par l'agent 'content-analysis'","service":"Social MCP Agent","timestamp":"2025-03-16 07:28:35"}
+{"level":"info","message":"[Agent-content-analysis] Agent d'analyse de contenu initialisé","service":"Social MCP Agent","timestamp":"2025-03-16 07:28:35"}
+{"level":"info","message":"Agent initialisé avec succès","service":"Social MCP Agent","timestamp":"2025-03-16 07:28:35"}
+{"level":"info","message":"[Agent-content-analysis] Initialisation de l'agent 'content-analysis'","service":"Social MCP Agent","timestamp":"2025-03-16 07:28:35"}
+{"level":"debug","message":"[Agent-content-analysis] Outil 'analyze_text' enregistré par l'agent 'content-analysis'","service":"Social MCP Agent","timestamp":"2025-03-16 07:28:35"}
+{"level":"debug","message":"[Agent-content-analysis] Outil 'analyze_image' enregistré par l'agent 'content-analysis'","service":"Social MCP Agent","timestamp":"2025-03-16 07:28:35"}
+{"level":"debug","message":"[Agent-content-analysis] Outil 'analyze_post' enregistré par l'agent 'content-analysis'","service":"Social MCP Agent","timestamp":"2025-03-16 07:28:35"}
+{"level":"debug","message":"[Agent-content-analysis] Ressource 'content_analysis_results' enregistrée par l'agent 'content-analysis'","service":"Social MCP Agent","timestamp":"2025-03-16 07:28:35"}
+{"level":"info","message":"[Agent-content-analysis] Agent d'analyse de contenu initialisé","service":"Social MCP Agent","timestamp":"2025-03-16 07:28:35"}
+{"level":"info","message":"[Agent-content-analysis] Agent 'content-analysis' démarré","service":"Social MCP Agent","timestamp":"2025-03-16 07:28:35"}
+{"level":"info","message":"[Agent-content-analysis] Agent d'analyse de contenu démarré","service":"Social MCP Agent","timestamp":"2025-03-16 07:28:35"}
+{"level":"info","message":"Agent démarré avec succès","service":"Social MCP Agent","timestamp":"2025-03-16 07:28:35"}
+{"level":"info","message":"Test de l'analyse de texte...","service":"Social MCP Agent","timestamp":"2025-03-16 07:28:35"}
+{"level":"info","message":"[Agent-content-analysis] Analyse de texte démarrée (ID: text_1742106515325_68cr5op)","service":"Social MCP Agent","timestamp":"2025-03-16 07:28:35"}
+{"level":"debug","message":"[Agent-content-analysis] Texte à analyser: Je suis très content de ce nouveau produit technologique !","service":"Social MCP Agent","timestamp":"2025-03-16 07:28:35"}
+{"level":"info","message":"Résultat de l'analyse de texte:","result":{"content":{"analysisId":"text_1742106515325_68cr5op","entities":[],"language":"fr","sentiment":{"confidence":0.7,"label":"positive","score":1},"textLength":58,"timestamp":"2025-03-16T06:28:35.326Z","topics":[{"confidence":0.3333333333333333,"matchedKeywords":["tech"],"name":"technologie"}]}},"service":"Social MCP Agent","timestamp":"2025-03-16 07:28:35"}
+{"level":"info","message":"[Agent-content-analysis] Agent 'content-analysis' arrêté","service":"Social MCP Agent","timestamp":"2025-03-16 07:28:35"}
+{"level":"info","message":"[Agent-content-analysis] Agent d'analyse de contenu arrêté","service":"Social MCP Agent","timestamp":"2025-03-16 07:28:35"}
+{"level":"info","message":"Test terminé avec succès","service":"Social MCP Agent","timestamp":"2025-03-16 07:28:35"}
+{"level":"info","message":"[App] Initialisation de l'application Social MCP Agent","service":"Social MCP Agent","timestamp":"2025-03-16 07:31:52"}
+{"level":"info","message":"[MCP-Middleware] Initialisation du middleware MCP","service":"Social MCP Agent","timestamp":"2025-03-16 07:31:52"}
+{"level":"info","message":"[ContextManager] Gestionnaire de contexte initialisé","service":"Social MCP Agent","timestamp":"2025-03-16 07:31:52"}
+{"level":"info","message":"[MessageRouter] Routeur de messages initialisé","service":"Social MCP Agent","timestamp":"2025-03-16 07:31:52"}
+{"level":"info","message":"[CapabilityRegistry] Registre des capacités initialisé","service":"Social MCP Agent","timestamp":"2025-03-16 07:31:52"}
+{"level":"info","message":"[MCP-Middleware] Transport stdio initialisé","service":"Social MCP Agent","timestamp":"2025-03-16 07:31:52"}
+{"level":"info","message":"[MCP-Middleware] Middleware MCP initialisé avec succès","service":"Social MCP Agent","timestamp":"2025-03-16 07:31:52"}
+{"level":"info","message":"[App] Initialisation des agents","service":"Social MCP Agent","timestamp":"2025-03-16 07:31:52"}
+{"level":"info","message":"[Agent-content-analysis] Agent 'content-analysis' créé","service":"Social MCP Agent","timestamp":"2025-03-16 07:31:52"}
+{"level":"info","message":"[Agent-content-analysis] Agent d'analyse de contenu créé","service":"Social MCP Agent","timestamp":"2025-03-16 07:31:52"}
+{"level":"info","message":"[Agent-content-analysis] Initialisation de l'agent 'content-analysis'","service":"Social MCP Agent","timestamp":"2025-03-16 07:31:52"}
+{"level":"debug","message":"[Agent-content-analysis] Outil 'analyze_text' enregistré par l'agent 'content-analysis'","service":"Social MCP Agent","timestamp":"2025-03-16 07:31:52"}
+{"level":"debug","message":"[Agent-content-analysis] Outil 'analyze_image' enregistré par l'agent 'content-analysis'","service":"Social MCP Agent","timestamp":"2025-03-16 07:31:52"}
+{"level":"debug","message":"[Agent-content-analysis] Outil 'analyze_post' enregistré par l'agent 'content-analysis'","service":"Social MCP Agent","timestamp":"2025-03-16 07:31:52"}
+{"level":"debug","message":"[Agent-content-analysis] Ressource 'content_analysis_results' enregistrée par l'agent 'content-analysis'","service":"Social MCP Agent","timestamp":"2025-03-16 07:31:52"}
+{"level":"info","message":"[Agent-content-analysis] Agent d'analyse de contenu initialisé","service":"Social MCP Agent","timestamp":"2025-03-16 07:31:52"}
+{"level":"debug","message":"[CapabilityRegistry] Outil 'analyze_text' enregistré","service":"Social MCP Agent","timestamp":"2025-03-16 07:31:52"}
+{"level":"debug","message":"[CapabilityRegistry] Outil 'analyze_image' enregistré","service":"Social MCP Agent","timestamp":"2025-03-16 07:31:52"}
+{"level":"debug","message":"[CapabilityRegistry] Outil 'analyze_post' enregistré","service":"Social MCP Agent","timestamp":"2025-03-16 07:31:52"}
+{"level":"debug","message":"[CapabilityRegistry] Ressource 'content_analysis_results' enregistrée","service":"Social MCP Agent","timestamp":"2025-03-16 07:31:52"}
+{"level":"info","message":"[MCP-Middleware] Agent 'content-analysis' enregistré avec succès","service":"Social MCP Agent","timestamp":"2025-03-16 07:31:52"}
+{"level":"info","message":"[App] 1 agent(s) initialisé(s)","service":"Social MCP Agent","timestamp":"2025-03-16 07:31:52"}
+{"level":"info","message":"[App] Application initialisée avec succès","service":"Social MCP Agent","timestamp":"2025-03-16 07:31:52"}
+{"level":"info","message":"[App] Démarrage de l'application Social MCP Agent","service":"Social MCP Agent","timestamp":"2025-03-16 07:31:52"}
+{"level":"info","message":"[App] Démarrage de l'agent 'content-analysis'","service":"Social MCP Agent","timestamp":"2025-03-16 07:31:52"}
+{"level":"info","message":"[Agent-content-analysis] Initialisation de l'agent 'content-analysis'","service":"Social MCP Agent","timestamp":"2025-03-16 07:31:52"}
+{"level":"debug","message":"[Agent-content-analysis] Outil 'analyze_text' enregistré par l'agent 'content-analysis'","service":"Social MCP Agent","timestamp":"2025-03-16 07:31:52"}
+{"level":"debug","message":"[Agent-content-analysis] Outil 'analyze_image' enregistré par l'agent 'content-analysis'","service":"Social MCP Agent","timestamp":"2025-03-16 07:31:52"}
+{"level":"debug","message":"[Agent-content-analysis] Outil 'analyze_post' enregistré par l'agent 'content-analysis'","service":"Social MCP Agent","timestamp":"2025-03-16 07:31:52"}
+{"level":"debug","message":"[Agent-content-analysis] Ressource 'content_analysis_results' enregistrée par l'agent 'content-analysis'","service":"Social MCP Agent","timestamp":"2025-03-16 07:31:52"}
+{"level":"info","message":"[Agent-content-analysis] Agent d'analyse de contenu initialisé","service":"Social MCP Agent","timestamp":"2025-03-16 07:31:52"}
+{"level":"info","message":"[Agent-content-analysis] Agent 'content-analysis' démarré","service":"Social MCP Agent","timestamp":"2025-03-16 07:31:52"}
+{"level":"info","message":"[Agent-content-analysis] Agent d'analyse de contenu démarré","service":"Social MCP Agent","timestamp":"2025-03-16 07:31:52"}
+{"level":"info","message":"[App] Application démarrée avec succès","service":"Social MCP Agent","timestamp":"2025-03-16 07:31:52"}
